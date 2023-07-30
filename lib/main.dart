@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sidebar/items.dart';
 
 void main() {
   runApp(const MyApp());
@@ -6,23 +7,18 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Animated side bar',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Animated Side Bar'),
     );
   }
 }
-
-
-
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -35,31 +31,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isTextVisible = true;
-  double cardWidth = 400; // Initial card width
+  double cardWidth = 400;
 
   void toggleTextVisibility() {
     setState(() {
       isTextVisible = !isTextVisible;
-      // Update the card width based on text visibility
       cardWidth = isTextVisible ? 400 : calculateCardWidth();
     });
   }
 
   double calculateCardWidth() {
-    // Calculate the width based on the number of icons
-    const double iconWidth = 24; // Width of each icon
-    const double spacing = 20; // Spacing between icons
-    const double right = 40;
-    const double textWidth = 56; // Width of each text
+    const double iconWidth = 24;
+    const double spacing = 20;
+    const double right = 45;
+    const double textWidth = 60;
 
-    double cardWidth =
-        ((iconWidth + spacing+right)) + textWidth; // Calculate the total width
+    double cardWidth = ((iconWidth + spacing + right)) + textWidth;
 
     return cardWidth;
   }
 
-   List<String> listOfString = ["Library HOme "];
-
+  final ItemData itemData = ItemData();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,17 +82,22 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: ListView.builder(
-                          itemCount: 30,
+                          itemCount: itemData.itemListFirst.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(left: 20,top: 20,bottom:0),
+                              padding: const EdgeInsets.only(
+                                  left: 20, top: 20, bottom: 0),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.icecream_outlined),
+                                  itemData.itemListFirst[index].icon,
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
                                   AnimatedCrossFade(
                                     duration: const Duration(milliseconds: 300),
                                     firstChild: Container(),
-                                    secondChild: const Text("Hello"),
+                                    secondChild: Text(
+                                        itemData.itemListFirst[index].name),
                                     crossFadeState: isTextVisible
                                         ? CrossFadeState.showSecond
                                         : CrossFadeState.showFirst,
@@ -121,17 +118,22 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: ListView.builder(
-                          itemCount: 30,
+                          itemCount: itemData.itemListSecond.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(left: 20,top: 20,bottom:0),
+                              padding: const EdgeInsets.only(
+                                  left: 20, top: 20, bottom: 0),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.icecream_outlined),
+                                  itemData.itemListSecond[index].icon,
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
                                   AnimatedCrossFade(
                                     duration: const Duration(milliseconds: 300),
                                     firstChild: Container(),
-                                    secondChild: const Text("Hello"),
+                                    secondChild: Text(
+                                        itemData.itemListSecond[index].name),
                                     crossFadeState: isTextVisible
                                         ? CrossFadeState.showSecond
                                         : CrossFadeState.showFirst,
@@ -152,26 +154,27 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Container(
                 width: 30,
                 height: 50,
-
-                decoration:  const BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  )
-                ),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    )),
                 child: Center(
                   child: Container(
-                    child: isTextVisible?const RotatedBox(
-                      quarterTurns: 3,
-                      child: Icon(Icons.expand_less,
-                      ),
-                    ):const RotatedBox(
-                      quarterTurns: 3,
-                      child: Icon(Icons.expand_more,
-                      ),
-                    )
-                  ),
+                      child: isTextVisible
+                          ? const RotatedBox(
+                              quarterTurns: 3,
+                              child: Icon(
+                                Icons.expand_less,
+                              ),
+                            )
+                          : const RotatedBox(
+                              quarterTurns: 3,
+                              child: Icon(
+                                Icons.expand_more,
+                              ),
+                            )),
                 ),
               ),
             ),
